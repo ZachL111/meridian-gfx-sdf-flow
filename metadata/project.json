@@ -1,0 +1,32 @@
+{
+  "index": 464,
+  "phase": 2,
+  "batch": 52,
+  "name": "meridian-gfx-sdf-flow",
+  "planned_name": "meridian-gfx-sdf-flow",
+  "language": "Dart",
+  "category": "Graphics",
+  "goal": "Design a Dart verification harness for sdf systems, covering constraint solving, bounded scenario files, and failure-oriented tests.",
+  "repository_url": "https://github.com/ZachL111/meridian-gfx-sdf-flow",
+  "verification_command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1",
+  "model": {
+    "inputs": [
+      "demand",
+      "capacity",
+      "latency",
+      "risk",
+      "weight"
+    ],
+    "threshold": 166,
+    "risk_penalty": 4,
+    "latency_penalty": 2,
+    "weight_bonus": 2,
+    "decision_rule": "accept when score is greater than or equal to threshold, otherwise review"
+  },
+  "quality_gates": [
+    "readme constraint scan",
+    "fixture presence check",
+    "metadata JSON parse",
+    "language verifier"
+  ]
+}
