@@ -1,68 +1,40 @@
 # meridian-gfx-sdf-flow
 
-`meridian-gfx-sdf-flow` treats graphics as a local verification problem. The Dart implementation is intentionally narrow, but the fixtures and notes make the behavior explicit.
+`meridian-gfx-sdf-flow` is a Dart project in graphics. Its focus is to design a Dart verification harness for sdf systems, covering constraint solving, bounded scenario files, and failure-oriented tests.
 
-## Meridian Gfx Sdf Flow Checkpoints
+## Use Case
 
-Treat the compact fixture as the contract and the extended examples as a scratchpad. The code should stay boring enough that a change in behavior is obvious from the test output.
+This is intentionally local and self-contained so it can be inspected without credentials, services, or seeded history.
 
-## Useful Pieces
+## Meridian Gfx Sdf Flow Review Notes
 
-- Includes extended examples for render inputs, including `surge` and `degraded`.
-- Documents stable output tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
-- Adds a repository audit script that checks structure before running the language verifier.
+The first comparison I would make is `render budget` against `shader drift` because it shows where the rule is most opinionated.
 
-## What This Is For
+## Highlights
 
-The goal is to capture the core behavior in code and make the surrounding assumptions obvious. A reader should be able to run the verifier, open the fixtures, and understand why each decision was made.
+- `fixtures/domain_review.csv` adds cases for geometry span and atlas pressure.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/meridian-gfx-sdf-walkthrough.md` walks through the case spread.
+- The Dart code includes a review path for `render budget` and `shader drift`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Project Layout
+## Code Layout
 
-- `lib`: library code
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
+The core code exposes a scoring path and the added review layer uses `signal`, `slack`, `drag`, and `confidence`. The domain terms are `geometry span`, `atlas pressure`, `shader drift`, and `render budget`.
 
-## Architecture Notes
+The Dart implementation avoids hidden state so fixture changes are easy to reason about.
 
-The core is a scoring model over demand, capacity, latency, risk, and weight. That keeps geometry data, layout fixtures, and render inputs in one explicit decision path. The threshold is 166, with risk penalty 4, latency penalty 2, and weight bonus 2. The Dart project uses a small library and assertion script, avoiding package dependencies for verification.
-
-## Local Workflow
+## Run The Check
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Regression Path
 
-## Case Study
+The check exercises the source code and the review fixture. `recovery` is the high score at 212; `edge` is the low score at 121.
 
-`surge` is the first example I would inspect because it lands on the `accept` path with a score of 212. The broader file also keeps `degraded` at 39 and `surge` at 212, which gives the model a useful low-to-high spread.
+## Future Work
 
-## Quality Gate
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
-
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Scope
-
-The repository favors determinism over breadth. It does not pull live data, keep secrets, or depend on network access for verification.
-
-## Expansion Ideas
-
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add a comparison mode that shows how decisions change when one signal is adjusted.
-- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
-- Add one more graphics fixture that focuses on a malformed or borderline input.
-
-## Tooling
-
-The only required setup is the local Dart toolchain. After cloning, stay in the repo root so fixture paths resolve correctly.
+The fixture set is small enough to audit by hand. The next useful expansion is malformed input coverage, not extra surface area.
